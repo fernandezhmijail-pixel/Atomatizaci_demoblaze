@@ -1,0 +1,58 @@
+package com.demoblaze.automation.interactions;
+
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Interaction;
+import net.serenitybdd.screenplay.Tasks;
+import net.serenitybdd.screenplay.targets.Target;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+import net.serenitybdd.screenplay.matchers.WebElementStateMatchers;
+import net.serenitybdd.core.Serenity;
+import org.openqa.selenium.JavascriptExecutor;
+
+public class ForzarClickAddToCart implements Interaction {
+
+    private final Target elemento;
+
+    public ForzarClickAddToCart(Target elemento) {
+        this.elemento = elemento;
+    }
+
+    public static ForzarClickAddToCart en(Target elemento) {
+        return Tasks.instrumented(ForzarClickAddToCart.class, elemento);
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+        int intentos = 0;
+        boolean exito = false;
+
+        while (!exito && intentos < 5) {
+            try {
+                // Esperar a que el botón esté presente y visible
+                actor.attemptsTo(
+                        WaitUntil.the(elemento, WebElementStateMatchers.isPresent())
+                                .forNoMoreThan(10).seconds(),
+                        WaitUntil.the(elemento, WebElementStateMatchers.isVisible())
+                                .forNoMoreThan(10).seconds()
+                );
+
+                // Scroll hacia el elemento
+                net.serenitybdd.screenplay.actions.Scroll.to(elemento).performAs(actor);
+
+                // Click con JS para forzar
+                JavascriptExecutor js = (JavascriptExecutor) Serenity.getWebdriverManager().getWebdriver();
+                js.executeScript("arguments[0].click();", elemento.resolveFor(actor));
+
+                exito = true;
+            } catch (Exception e) {
+                intentos++;
+                System.out.println("Intento " + intentos + " de click fallido, reintentando...");
+                try { Thread.sleep(500); } catch (InterruptedException ignored) {}
+            }
+        }
+
+        if (!exito) {
+            throw new RuntimeException("No se pudo hacer click en Add to Cart después de 5 intentos");
+        }
+    }
+}

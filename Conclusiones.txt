@@ -1,0 +1,32 @@
+# Conclusiones - Demoblaze Web Functional Automation
+
+## 1. Objetivo
+Automatizar las pruebas funcionales de la página Demoblaze usando Screenplay, asegurando que las funcionalidades clave (como agregar productos al carrito) se ejecuten correctamente.
+
+## 2. Hallazgos
+
+1. Algunos productos tienen nombres dinámicos, lo que dificulta la selección directa mediante texto o IDs.
+2. Solución adoptada:
+   - Utilizar la imagen o atributos relativos del producto para realizar la selección.
+   - Esto evita tener que hacer un análisis profundo del HTML y sigue siendo confiable.
+3. La estructura **Screenplay** permite separar responsabilidades y mejorar mantenibilidad:
+   - Actores: representan al usuario.
+   - Tasks: acciones que realiza el actor.
+   - Interactions/Questions: validaciones y consultas de estado.
+4. Integración con Maven y Serenity permite generación de reportes claros y ejecución reproducible.
+5. Posibilidad de ejecutar tests en contenedores Docker para entornos aislados.
+6. Integración con Jenkins permite automatización continua y programación de ejecuciones periódicas (schedules).
+
+## 3. Conclusiones
+
+- Screenplay + Serenity + Selenium es una arquitectura robusta para pruebas funcionales complejas.
+- La selección dinámica de productos se puede resolver sin necesidad de modificar el HTML.
+- La combinación de Docker y Jenkins ofrece escalabilidad y confiabilidad en pipelines de CI/CD.
+- Los reportes generados por Serenity son muy útiles para validar resultados y compartir hallazgos con el equipo.
+
+## 4. Recomendaciones
+
+- Mantener los selectores dinámicos basados en atributos estables o imágenes.
+- Documentar bien las Tasks y Questions en Screenplay para facilitar mantenimiento.
+- Configurar pipelines en Jenkins para ejecución periódica y generación automática de reportes.
+- Usar Docker para pruebas en entornos controlados y reproducibles.
